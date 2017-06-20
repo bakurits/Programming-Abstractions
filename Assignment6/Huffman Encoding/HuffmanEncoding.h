@@ -12,6 +12,7 @@
 
 #include "HuffmanTypes.h"
 #include "map.h"
+#include "pqueue.h"
 #include "bstream.h"
 
 /* Function: getFrequencyTable
@@ -141,5 +142,12 @@ void compress(ibstream& infile, obstream& outfile);
  * primarily be glue code.
  */
 void decompress(ibstream& infile, ostream& outfile);
+
+
+/*
+ *
+ *
+ */
+Node* mergeTree(Node* first, Node* second);
 
 #endif

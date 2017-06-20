@@ -22,9 +22,20 @@
  * the PSEUDO_EOF character.
  */
 Map<ext_char, int> getFrequencyTable(istream& file) {
-	// TODO: Implement this!
+	Map <ext_char, int> characterFrequency();
+
+	while (true) {
+		ext_char ch = char(file.get());
+		if (ch == EOF) break;
+		
+		if (characterFrequency.containsKey(ext_char)) {
+			characterFrequency[ext_char]++;
+		} else {
+			characterFrequency.put(ext_char, 1);
+		}
+	}
 	
-	return Map<ext_char, int>();	
+	return characterFrequency;	
 }
 
 /* Function: buildEncodingTree
@@ -39,9 +50,26 @@ Map<ext_char, int> getFrequencyTable(istream& file) {
  * be present.
  */
 Node* buildEncodingTree(Map<ext_char, int>& frequencies) {
-	// TODO: Implement this!
-	
-	return NULL;
+	PriorityQueue<Node*> nodesQueue;
+	foreach (ext_char ch in frequencies) {
+		Node* newNode = new Node;
+		newNode->one = newNode->zero - NULL;
+		nodesQueue.enqueue(newNode, frequencies.get(ch));
+	}
+
+	while (nodesQueue.size() > 1) {
+		Node* firstTree = nodesQueue.dequeue();
+		Node* secondTree = nodesQueue.dequeue();
+
+		Node* newTree = mergeTrees(firstTree, secondTree);
+		nodesQueue.enqueue(newTree, newTree->weight);
+	}
+
+	if (nodesQueue.size() > 0) {
+		return nodesQueue.dequeue();
+	} else {
+		return NULL;
+	}
 }
 
 /* Function: freeTree
@@ -51,7 +79,10 @@ Node* buildEncodingTree(Map<ext_char, int>& frequencies) {
  * tree.
  */
 void freeTree(Node* root) {
-	// TODO: Implement this!
+	if (root == NULL) return;
+	freeTree(root->zero);
+	freeTree(root->one);
+	delete root;
 }
 
 /* Function: encodeFile
@@ -218,3 +249,10 @@ void decompress(ibstream& infile, ostream& outfile) {
 	// TODO: Implement this!
 }
 
+/*
+ *
+ *
+ */
+Node* mergeTree(Node* first, Node* second) {
+
+}
