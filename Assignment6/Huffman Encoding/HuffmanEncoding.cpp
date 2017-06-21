@@ -249,11 +249,18 @@ void decompress(ibstream& infile, ostream& outfile) {
 	// TODO: Implement this!
 }
 
-/*
- *
- *
+/*Function: mergeTrees
+ * Usage: mergeTrees(first, second);
+ * --------------------------------------------------------
+ * This method merges two trees for prepare encoding tree.
+ * Makes new node which is new root of tree and his left and right
+ * subtees are given trees(first and second)
  */
 Node* mergeTrees(Node* first, Node* second) {
 	Node* newNode = new Node;
-	return newNode;	
+	newNode->weight = first->weight + second->weight;
+	newNode->character = NOT_A_CHAR;
+	newNode->zero = first;
+	newNode->one = second;
+	return newNode;
 }
