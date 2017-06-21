@@ -34,7 +34,7 @@ Map<ext_char, int> getFrequencyTable(istream& file) {
 			characterFrequency.put(ch, 1);
 		}
 	}
-	
+	characterFrequency.put(PSEUDO_EOF, 1);
 	return characterFrequency;	
 }
 
@@ -104,7 +104,9 @@ void freeTree(Node* root) {
  *     without seeking the file anywhere.
  */ 
 void encodeFile(istream& infile, Node* encodingTree, obstream& outfile) {
-	// TODO: Implement this!
+	Map <ext_char, string> charactersCode = getCharacterPath(encodingTree);
+
+	
 }
 
 /* Function: decodeFile
@@ -249,7 +251,7 @@ void decompress(ibstream& infile, ostream& outfile) {
 	// TODO: Implement this!
 }
 
-/*Function: mergeTrees
+/* Function: mergeTrees
  * Usage: mergeTrees(first, second);
  * --------------------------------------------------------
  * This method merges two trees for prepare encoding tree.
@@ -263,4 +265,30 @@ Node* mergeTrees(Node* first, Node* second) {
 	newNode->zero = first;
 	newNode->one = second;
 	return newNode;
+}
+
+/*
+ *
+ *
+ */
+Map<ext_char, string> getCharacterPath(Node* encodingTree) {
+	Map<ext_char, string> characterPath;
+	getCharacterPathRec(encodingTree, characterPath, "");
+	return characterPath;
+}
+
+/*
+ *
+ *
+ */
+void getCharacterPathRec(Node* encodingTree, Map<ext_char, string> &characterPath, string curPath) {
+	if (encodingTree == NULL) return;
+	if (encodingTree->character != NOT_A_CHAR) {
+		characterPath.put(encodingTree->character, curPath);
+		return;
+	}
+	string leftPath = curPath + "0";
+	string rightPath = curPath + "1";
+	getCharacterPathRec(encodingTree->zero, characterPath, leftPath);
+	getCharacterPathRec(encodingTree->one, characterPath, rightPath);
 }

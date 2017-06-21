@@ -143,11 +143,25 @@ void compress(ibstream& infile, obstream& outfile);
  */
 void decompress(ibstream& infile, ostream& outfile);
 
+/* Function: mergeTrees
+ * Usage: mergeTrees(first, second);
+ * --------------------------------------------------------
+ * This method merges two trees for prepare encoding tree.
+ * Makes new node which is new root of tree and his left and right
+ * subtees are given trees(first and second)
+ */
+Node* mergeTrees(Node* first, Node* second);
 
 /*
  *
  *
  */
-Node* mergeTrees(Node* first, Node* second);
+Map<ext_char, string> getCharacterPath(Node* encodingTree);
+
+/*
+ *
+ *
+ */
+void getCharacterPathRec(Node* encodingTree, Map<ext_char, string> &characterPath, string curPath);
 
 #endif
