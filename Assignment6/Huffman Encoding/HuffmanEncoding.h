@@ -148,6 +148,6 @@ void decompress(ibstream& infile, ostream& outfile);
  *
  *
  */
-Node* mergeTree(Node* first, Node* second);
+Node* mergeTrees(Node* first, Node* second);
 
 #endif

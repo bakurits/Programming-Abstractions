@@ -22,16 +22,16 @@
  * the PSEUDO_EOF character.
  */
 Map<ext_char, int> getFrequencyTable(istream& file) {
-	Map <ext_char, int> characterFrequency();
+	Map <ext_char, int> characterFrequency;
 
 	while (true) {
 		ext_char ch = char(file.get());
 		if (ch == EOF) break;
 		
-		if (characterFrequency.containsKey(ext_char)) {
-			characterFrequency[ext_char]++;
+		if (characterFrequency.containsKey(ch)) {
+			characterFrequency[ch]++;
 		} else {
-			characterFrequency.put(ext_char, 1);
+			characterFrequency.put(ch, 1);
 		}
 	}
 	
@@ -253,6 +253,7 @@ void decompress(ibstream& infile, ostream& outfile) {
  *
  *
  */
-Node* mergeTree(Node* first, Node* second) {
-
+Node* mergeTrees(Node* first, Node* second) {
+	Node* newNode = new Node;
+	return newNode;	
 }
