@@ -170,6 +170,6 @@ void getCharacterPathRec(Node* encodingTree, Map<ext_char, string> &characterPat
  * This function prints character in output file
  * bit by bit
  */
-void printCharachtersCode(ext_char ch, Map<ext_char, string> &charactersCodes);
+void printCharachtersCode(ext_char ch, Map<ext_char, string> &charactersCodes, obstream &outfile);
 
 #endif

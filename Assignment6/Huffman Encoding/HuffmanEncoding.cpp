@@ -25,7 +25,7 @@ Map<ext_char, int> getFrequencyTable(istream& file) {
 	Map <ext_char, int> characterFrequency;
 
 	while (true) {
-		ext_char ch = char(file.get());
+		ext_char ch = file.get();
 		if (ch == EOF) break;
 		
 		if (characterFrequency.containsKey(ch)) {
@@ -53,6 +53,8 @@ Node* buildEncodingTree(Map<ext_char, int>& frequencies) {
 	PriorityQueue<Node*> nodesQueue;
 	foreach (ext_char ch in frequencies) {
 		Node* newNode = new Node;
+		newNode->character = ch;
+		newNode->weight = frequencies.get(ch);
 		newNode->one = newNode->zero - NULL;
 		nodesQueue.enqueue(newNode, frequencies.get(ch));
 	}
@@ -106,7 +108,7 @@ void freeTree(Node* root) {
 void encodeFile(istream& infile, Node* encodingTree, obstream& outfile) {
 	Map <ext_char, string> charactersCodes = getCharacterPath(encodingTree);
 	while (true) {
-		ext_char ch = char(infile.get());
+		ext_char ch = infile.get();
 		if (ch == EOF) break;
 		printCharachtersCode(ch, charactersCodes, outfile);
 	}
