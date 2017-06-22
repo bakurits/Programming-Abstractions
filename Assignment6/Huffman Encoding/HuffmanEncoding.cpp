@@ -273,8 +273,8 @@ Node* mergeTrees(Node* first, Node* second) {
 
 /* Function: getCharacterPath
  * Usage: getCharacterPath(encodingTree);
- * This function is wrapper 
- *
+ * This function is wrapper for getCharacterPathRec
+ * It returns codes for every character in input file
  */
 Map<ext_char, string> getCharacterPath(Node* encodingTree) {
 	Map<ext_char, string> characterPath;
@@ -282,9 +282,9 @@ Map<ext_char, string> getCharacterPath(Node* encodingTree) {
 	return characterPath;
 }
 
-/*
- *
- *
+/* Function: getCharacterPathRec
+ * Usage: getCharacterPathRec(encodingTree, characterPath, curPath);
+ * This function finds codes for every character in input file
  */
 void getCharacterPathRec(Node* encodingTree, Map<ext_char, string> &characterPath, string curPath) {
 	if (encodingTree == NULL) return;
@@ -298,9 +298,10 @@ void getCharacterPathRec(Node* encodingTree, Map<ext_char, string> &characterPat
 	getCharacterPathRec(encodingTree->one, characterPath, rightPath);
 }
 
-/*
- *
- *
+/* Function: printCharachtersCode
+ * Usage: printCharachtersCode(ch, charactersCodes, outfile);
+ * This function prints character in output file
+ * bit by bit
  */
 void printCharachtersCode(ext_char ch, Map<ext_char, string> &charactersCodes, obstream &outfile) {
 	string charactersCode = charactersCodes.get(ch);
