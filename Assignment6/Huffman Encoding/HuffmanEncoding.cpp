@@ -104,9 +104,13 @@ void freeTree(Node* root) {
  *     without seeking the file anywhere.
  */ 
 void encodeFile(istream& infile, Node* encodingTree, obstream& outfile) {
-	Map <ext_char, string> charactersCode = getCharacterPath(encodingTree);
-
-	
+	Map <ext_char, string> charactersCodes = getCharacterPath(encodingTree);
+	while (true) {
+		ext_char ch = char(infile.get());
+		if (ch == EOF) break;
+		printCharachtersCode(ch, charactersCodes, outfile);
+	}
+	printCharachtersCode(PSEUDO_EOF, charactersCodes, outfile);
 }
 
 /* Function: decodeFile
@@ -267,8 +271,9 @@ Node* mergeTrees(Node* first, Node* second) {
 	return newNode;
 }
 
-/*
- *
+/* Function: getCharacterPath
+ * Usage: getCharacterPath(encodingTree);
+ * This 
  *
  */
 Map<ext_char, string> getCharacterPath(Node* encodingTree) {
@@ -292,3 +297,20 @@ void getCharacterPathRec(Node* encodingTree, Map<ext_char, string> &characterPat
 	getCharacterPathRec(encodingTree->zero, characterPath, leftPath);
 	getCharacterPathRec(encodingTree->one, characterPath, rightPath);
 }
+
+/*
+ *
+ *
+ */
+void printCharachtersCode(ext_char ch, Map<ext_char, string> &charactersCodes, obstream &outfile) {
+	string charactersCode = charactersCodes.get(ch);
+
+	for (int i = 0; i < charactersCode.size(); i++) {
+		if (charactersCode[i] == '0') {
+			outfile.writeBit(0);
+		} else {
+			outfile.writeBit(1);
+		}
+	}
+}
+

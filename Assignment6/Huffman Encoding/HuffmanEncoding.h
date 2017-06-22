@@ -164,4 +164,10 @@ Map<ext_char, string> getCharacterPath(Node* encodingTree);
  */
 void getCharacterPathRec(Node* encodingTree, Map<ext_char, string> &characterPath, string curPath);
 
+/*
+ *
+ *
+ */
+void printCharachtersCode(ext_char ch, Map<ext_char, string> &charactersCodes);
+
 #endif
