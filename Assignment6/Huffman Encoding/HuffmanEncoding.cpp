@@ -273,7 +273,7 @@ Node* mergeTrees(Node* first, Node* second) {
 
 /* Function: getCharacterPath
  * Usage: getCharacterPath(encodingTree);
- * This 
+ * This function is wrapper 
  *
  */
 Map<ext_char, string> getCharacterPath(Node* encodingTree) {
