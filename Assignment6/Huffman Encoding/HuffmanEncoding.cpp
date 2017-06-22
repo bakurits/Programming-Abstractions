@@ -126,7 +126,23 @@ void encodeFile(istream& infile, Node* encodingTree, obstream& outfile) {
  *   - The output file is open and ready for writing.
  */
 void decodeFile(ibstream& infile, Node* encodingTree, ostream& file) {
-	// TODO: Implement this!
+	Node* curNode = encodingTree;
+	while (true) {
+
+		if (curNode->character != NOT_A_CHAR) {
+			if (curNode->character == PSEUDO_EOF) return;
+			file << curNode->character;
+			curNode = encodingTree;
+			continue;
+		}
+
+		int curBit = infile.readBit();
+		if (curBit == 0) {
+			curNode = curNode->zero;
+		} else {
+			curNode = curNode->one;
+		}
+	}
 }
 
 /* Function: writeFileHeader
