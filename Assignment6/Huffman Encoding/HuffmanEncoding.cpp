@@ -55,7 +55,7 @@ Node* buildEncodingTree(Map<ext_char, int>& frequencies) {
 		Node* newNode = new Node;
 		newNode->character = ch;
 		newNode->weight = frequencies.get(ch);
-		newNode->one = newNode->zero - NULL;
+		newNode->one = newNode->zero = NULL;
 		nodesQueue.enqueue(newNode, frequencies.get(ch));
 	}
 
