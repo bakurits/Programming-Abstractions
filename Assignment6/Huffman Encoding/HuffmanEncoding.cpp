@@ -133,7 +133,7 @@ void decodeFile(ibstream& infile, Node* encodingTree, ostream& file) {
 
 		if (curNode->character != NOT_A_CHAR) {
 			if (curNode->character == PSEUDO_EOF) return;
-			file << curNode->character;
+			file << char(curNode->character);
 			curNode = encodingTree;
 			continue;
 		}
@@ -255,6 +255,7 @@ Map<ext_char, int> readFileHeader(ibstream& infile) {
  */
 void compress(ibstream& infile, obstream& outfile) {
 	Map<ext_char, int> frequencies = getFrequencyTable(infile);
+	infile.rewind();
 	Node* encodingTree = buildEncodingTree(frequencies);
 	writeFileHeader(outfile, frequencies);
 	encodeFile(infile, encodingTree, outfile);
