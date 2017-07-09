@@ -55,4 +55,22 @@ void prepareInitialState(Grid<double>& world,
 						 int N_Rows, 
 						 int N_Cols, 
 						 Loc start);
+
+/* Function: neighbourCheck
+ *
+ * This method checks each neighbour of current node.
+ * Changes color and current distance from starting node if it's necessary.
+ */
+void neighbourCheck(Grid<double>& world, 
+					Grid<Node> &nodesCondition, 
+					TrailblazerPQueue<Loc> &minDistQueue, 
+					Loc curLocation,
+					double costFn(Loc from, Loc to, Grid<double>& world));
+
+/* Function: getRoute
+ *
+ * This function returns best route from start to end.
+ */
+Vector <Loc> getRoute(Grid<Node> &nodesCondition, Loc start, Loc end);
+
 #endif
