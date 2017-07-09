@@ -30,11 +30,70 @@ Vector<Loc> shortestPath(Loc start,
 			 			 Grid<double>& world,
 			 			 double costFn(Loc from, Loc to, Grid<double>& world)) {
 	
-	Grid<node> 
+	int N_Rows = word.numRows();  int N_Cols = word.numCols();
 
+	Grid<Node> nodesCondition(N_Rows, N_Cols);
+	TrailblazerPQueue <Loc> minDistQueue;
+
+	prepareInitialState(world, nodesCondition, minDistQueue, N_Rows, N_Cols, start);
+
+	while (!minDistQueue.isEmpty()) {
+		Loc curNode = minDistQueue.dequeue();
+		nodesCondition[curNode.row][curNode.col].color = GREEN; colorCell(world, curNode, GREEN);
+		if (curNode == end) break;
+		neighbourCheck(world, nodesCondition, minDistQueue, curNode);
+	}
 	error("shortestPath is not implemented yet.");
 }
 
 Set<Edge> createMaze(int numRows, int numCols) {
 	error("createMaze is not implemented yet.");
+}
+
+void prepareInitialState(Grid<double>& world, 
+						 Grid<Node> &nodesCondition, 
+						 TrailblazerPQueue<Loc> &minDistQueue, 
+						 int N_Rows, 
+						 int N_Cols, 
+						 Loc start) {
+	
+	for (int i = 0; i < N_Rows; i++) {
+		for (int j = 0; j < N_Cols; j++) {
+			nodesCondition[i][j].color = GRAY;
+			nodesCondition[i][j].location = makeLoc(i, j);
+			nodesCondition[i][i].parent = makeLoc(-1, -1);
+			colorCell(world, nodesCondition[i][j].location, GRAY);
+		}
+	}
+
+	colorCell(world, start, YELLOW);
+	nodesCondition[start.row][start.col].dist = 0;
+	minDistQueue.enqueue(start, 0);
+
+}
+
+void neighbourCheck(Grid<double>& world, 
+					Grid<Node> &nodesCondition, 
+					TrailblazerPQueue<Loc> &minDistQueue, 
+					Loc curLocation,
+					double costFn(Loc from, Loc to, Grid<double>& world)) {
+	int curRow = curLocation.row; int curCol = curLocation.col;
+	for (int vx = -1; vx <= 1; vx++) {
+			for (int vy = -1; vy <= 1; vy++) {
+				newLocRow = curRow + vy;	newLocCol = curCol + vx;
+				double EdgeCost = costFn(curLocation, makeLoc(newLocRow, newLocCol), world);
+				if (nodesCondition[newLocRow][newLocCol].color == GRAY) {
+					nodesCondition[newLocRow][newLocCol].color = YELLOW;
+					nodesCondition[newLocRow][newLocCol].dist = nodesCondition[curRow][curCol].dist + EdgeCost;
+					nodesCondition[newLocRow][newLocCol].parent = curLocation;
+				} else {
+					if (nodesCondition[newLocRow][newLocCol].color == YELLOW &&
+						nodesCondition[newLocRow][newLocCol].dist > nodesCondition[curRow][curCol].dist + EdgeCost) {
+							nodesCondition[newLocRow][newLocCol].dist = nodesCondition[curRow][curCol].dist + EdgeCost;
+							nodesCondition[newLocRow][newLocCol].parent = curLocation;
+							minDistQueue.decreaseKey(makeLoc(newLocRow, newLocCol), nodesCondition[newLocRow][newLocCol].dist);
+						}
+				}
+			}
+		}
 }

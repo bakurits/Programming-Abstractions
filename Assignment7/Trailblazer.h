@@ -44,4 +44,15 @@ shortestPath(Loc start,
  */
 Set<Edge> createMaze(int numRows, int numCols);
 
+/* Function: prepareInitialState
+ *
+ * This function prepares initial state of algorithm
+ * Makes nodes grey and Puts srarting point in queue.
+ */
+void prepareInitialState(Grid<double>& world, 
+						 Grid<Node> &nodesCondition, 
+						 TrailblazerPQueue<Loc> &minDistQueue, 
+						 int N_Rows, 
+						 int N_Cols, 
+						 Loc start);
 #endif

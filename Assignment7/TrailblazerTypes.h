@@ -43,17 +43,20 @@ struct Edge {
 /* Utility function to create an Edge from its endpoints. */
 Edge makeEdge(Loc start, Loc end);
 
-/*
+/* Type: Node
  *
+ * A type representing an node in the grid.
+ * It stores location, color and parent node of node. 
  */
 struct Node {
+	int dist;
 	Loc location;
 	Color color;
 	Loc parent;
 }
 
 /* Utility function to create an Node from its location, color and parent. */
-Node makeNode(Loc location, Color color, Loc parent);
+Node makeNode(int dist, Loc location, Color color, Loc parent);
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
