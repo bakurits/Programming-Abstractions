@@ -17,7 +17,7 @@ Vector<Loc> shortestPath(Loc start,
 			 			 Grid<double>& world,
 			 			 double costFn(Loc from, Loc to, Grid<double>& world)) {
 	
-	int N_Rows = word.numRows();  int N_Cols = word.numCols();
+	int N_Rows = world.numRows();  int N_Cols = world.numCols();
 
 	Grid<Node> nodesCondition(N_Rows, N_Cols);
 	TrailblazerPQueue <Loc> minDistQueue;
@@ -25,12 +25,12 @@ Vector<Loc> shortestPath(Loc start,
 	prepareInitialState(world, nodesCondition, minDistQueue, N_Rows, N_Cols, start);
 
 	while (!minDistQueue.isEmpty()) {
-		Loc curNode = minDistQueue.dequeue();
+		Loc curNode = minDistQueue.dequeueMin();
 		nodesCondition[curNode.row][curNode.col].color = GREEN; 
 		colorCell(world, curNode, GREEN);
 		
 		if (curNode == end) break;
-		neighbourCheck(world, nodesCondition, minDistQueue, curNode);
+		neighbourCheck(world, nodesCondition, minDistQueue, curNode, double costFn(Loc from, Loc to, Grid<double>& world));
 	}
 
 	if (nodesCondition[end.row][end.col].color != GREEN) 
@@ -74,7 +74,7 @@ void neighbourCheck(Grid<double>& world,
 	int curRow = curLocation.row; int curCol = curLocation.col;
 	for (int vx = -1; vx <= 1; vx++) {
 			for (int vy = -1; vy <= 1; vy++) {
-				newLocRow = curRow + vy;	newLocCol = curCol + vx;
+				int newLocRow = curRow + vy;	int newLocCol = curCol + vx;
 				double EdgeCost = costFn(curLocation, makeLoc(newLocRow, newLocCol), world);
 
 				if (nodesCondition[newLocRow][newLocCol].color == GRAY) {
@@ -101,6 +101,7 @@ Vector <Loc> getRoute(Grid<Node> &nodesCondition, Loc start, Loc end) {
 		result.add(curLoc);
 		curLoc = nodesCondition[curLoc.row][curLoc.col].parent;
 	}
-
+	
+	for ()
 	reverse(result.begin(), result.end());
 }

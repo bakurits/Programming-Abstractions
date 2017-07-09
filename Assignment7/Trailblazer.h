@@ -11,6 +11,7 @@
 #include "TrailblazerTypes.h"
 #include "set.h"
 #include "grid.h"
+#include "TrailblazerPQueue.h"
 
 /* Function: shortestPath
  * 

@@ -53,7 +53,7 @@ struct Node {
 	Loc location;
 	Color color;
 	Loc parent;
-}
+};
 
 /* Utility function to create an Node from its location, color and parent. */
 Node makeNode(int dist, Loc location, Color color, Loc parent);
