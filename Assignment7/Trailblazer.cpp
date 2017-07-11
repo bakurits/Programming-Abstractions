@@ -30,7 +30,7 @@ Vector<Loc> shortestPath(Loc start,
 		colorCell(world, curNode, GREEN);
 		
 		if (curNode == end) break;
-		neighbourCheck(world, nodesCondition, minDistQueue, curNode, double costFn(Loc from, Loc to, Grid<double>& world));
+		neighbourCheck(world, nodesCondition, minDistQueue, curNode, costFn);
 	}
 
 	if (nodesCondition[end.row][end.col].color != GREEN) 
@@ -102,6 +102,7 @@ Vector <Loc> getRoute(Grid<Node> &nodesCondition, Loc start, Loc end) {
 		curLoc = nodesCondition[curLoc.row][curLoc.col].parent;
 	}
 	
-	for ()
-	reverse(result.begin(), result.end());
+	for (int i = 0; i < result.size(); i++) {
+		if (i < result.size() - i - 1) swap(result[i], result[result.size() - i - 1]);
+	}
 }
