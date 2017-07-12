@@ -14,7 +14,8 @@ using namespace std;
 Vector<Loc> shortestPath(Loc start,
 						 Loc end,
 						 Grid<double> &world,
-						 double costFn(Loc from, Loc to, Grid<double> &world))
+						 double costFn(Loc from, Loc to, Grid<double> &world),
+						 double heuristic(Loc start, Loc end, Grid<double>& world))
 {
 
 	int N_Rows = world.numRows(); // Number of Rows
@@ -25,7 +26,7 @@ Vector<Loc> shortestPath(Loc start,
 
 	TrailblazerPQueue<Loc> minDistQueue; // Stores nodes associated with their distance from sratring cell.
 
-	prepareInitialState(world, nodes, minDistQueue, N_Rows, N_Cols, start);
+	prepareInitialState(world, nodes, minDistQueue, N_Rows, N_Cols, start, heuristic);
 
 	while (!minDistQueue.isEmpty())
 	{
@@ -35,7 +36,7 @@ Vector<Loc> shortestPath(Loc start,
 
 		if (curNode == end)
 			break;
-		neighbourCheck(world, nodes, minDistQueue, curNode, costFn);
+		neighbourCheck(world, nodes, minDistQueue, curNode, end, costFn, heuristic);
 	}
 
 	if (nodes[end.row][end.col].color != GREEN)
@@ -56,7 +57,8 @@ void prepareInitialState(Grid<double> &world,
 						 TrailblazerPQueue<Loc> &minDistQueue,
 						 int N_Rows,
 						 int N_Cols,
-						 Loc start)
+						 Loc start,
+						 double heuristic(Loc start, Loc end, Grid<double>& world))
 {
 
 	for (int i = 0; i < N_Rows; i++)
@@ -72,14 +74,16 @@ void prepareInitialState(Grid<double> &world,
 
 	colorCell(world, start, YELLOW);
 	nodes[start.row][start.col].dist = 0;
-	minDistQueue.enqueue(start, 0);
+	minDistQueue.enqueue(start, heuristic(start, end, world));
 }
 
 void neighbourCheck(Grid<double> &world,
 					Grid<Node> &nodes,
 					TrailblazerPQueue<Loc> &minDistQueue,
 					Loc curLocation,
-					double costFn(Loc from, Loc to, Grid<double> &world))
+					Loc end,
+					double costFn(Loc from, Loc to, Grid<double> &world),
+					double heuristic(Loc start, Loc end, Grid<double>& world))
 {
 
 	int curRow = curLocation.row;
@@ -93,7 +97,9 @@ void neighbourCheck(Grid<double> &world,
 			if (!world.inBounds(newRow, newCol))
 				continue;
 
-			double newDist = nodes[curRow][curCol].dist + costFn(curLocation, makeLoc(newRow, newCol), world);
+			double newDist = nodes[curRow][curCol].dist + 
+							 costFn(curLocation, makeLoc(newRow, newCol), world) +
+							 heuristic(makeLoc(newRow, newCol), end);
 
 			if (nodes[newRow][newCol].color == GRAY)
 			{

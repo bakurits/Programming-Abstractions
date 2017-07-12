@@ -31,7 +31,8 @@ Vector<Loc>
 shortestPath(Loc start,
 			 Loc end,
 			 Grid<double> &world,
-			 double costFn(Loc from, Loc to, Grid<double> &world));
+			 double costFn(Loc from, Loc to, Grid<double> &world),
+			 double heuristic(Loc start, Loc end, Grid<double>& world));
 
 /* Function: createMaze
  * 
@@ -55,7 +56,8 @@ void prepareInitialState(Grid<double> &world,
 						 TrailblazerPQueue<Loc> &minDistQueue,
 						 int N_Rows,
 						 int N_Cols,
-						 Loc start);
+						 Loc start,
+						 double heuristic(Loc start, Loc end, Grid<double>& world));
 
 /* Function: neighbourCheck
  *
@@ -66,7 +68,9 @@ void neighbourCheck(Grid<double> &world,
 					Grid<Node> &nodes,
 					TrailblazerPQueue<Loc> &minDistQueue,
 					Loc curLocation,
-					double costFn(Loc from, Loc to, Grid<double> &world));
+					Loc end,
+					double costFn(Loc from, Loc to, Grid<double> &world),
+					double heuristic(Loc start, Loc end, Grid<double>& world));
 
 /* Function: getRoute
  *
