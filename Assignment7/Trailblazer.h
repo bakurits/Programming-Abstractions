@@ -29,9 +29,9 @@
  */
 Vector<Loc>
 shortestPath(Loc start,
-             Loc end,
-             Grid<double>& world,
-             double costFn(Loc from, Loc to, Grid<double>& world));
+			 Loc end,
+			 Grid<double> &world,
+			 double costFn(Loc from, Loc to, Grid<double> &world));
 
 /* Function: createMaze
  * 
@@ -50,11 +50,11 @@ Set<Edge> createMaze(int numRows, int numCols);
  * This function prepares initial state of algorithm
  * Makes nodes grey and Puts srarting point in queue.
  */
-void prepareInitialState(Grid<double>& world, 
-						 Grid<Node> &nodesCondition, 
-						 TrailblazerPQueue<Loc> &minDistQueue, 
-						 int N_Rows, 
-						 int N_Cols, 
+void prepareInitialState(Grid<double> &world,
+						 Grid<Node> &nodes,
+						 TrailblazerPQueue<Loc> &minDistQueue,
+						 int N_Rows,
+						 int N_Cols,
 						 Loc start);
 
 /* Function: neighbourCheck
@@ -62,16 +62,16 @@ void prepareInitialState(Grid<double>& world,
  * This method checks each neighbour of current node.
  * Changes color and current distance from starting node if it's necessary.
  */
-void neighbourCheck(Grid<double>& world, 
-					Grid<Node> &nodesCondition, 
-					TrailblazerPQueue<Loc> &minDistQueue, 
+void neighbourCheck(Grid<double> &world,
+					Grid<Node> &nodes,
+					TrailblazerPQueue<Loc> &minDistQueue,
 					Loc curLocation,
-					double costFn(Loc from, Loc to, Grid<double>& world));
+					double costFn(Loc from, Loc to, Grid<double> &world));
 
 /* Function: getRoute
  *
  * This function returns best route from start to end.
  */
-Vector <Loc> getRoute(Grid<Node> &nodesCondition, Loc start, Loc end);
+Vector<Loc> getRoute(Grid<Node> &nodes, Loc start, Loc end);
 
 #endif
