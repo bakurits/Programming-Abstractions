@@ -17,11 +17,13 @@ Vector<Loc> shortestPath(Loc start,
 						 double costFn(Loc from, Loc to, Grid<double> &world))
 {
 
-	int N_Rows = world.numRows();
-	int N_Cols = world.numCols();
+	int N_Rows = world.numRows(); // Number of Rows
+	int N_Cols = world.numCols(); // Number of Columns
 
-	Grid<Node> nodes(N_Rows, N_Cols);
-	TrailblazerPQueue<Loc> minDistQueue;
+	Grid<Node> nodes(N_Rows, N_Cols); // Stores information about grid cells.
+									  // Their location, color, parent and distance from starting cell.
+
+	TrailblazerPQueue<Loc> minDistQueue; // Stores nodes associated with their distance from sratring cell.
 
 	prepareInitialState(world, nodes, minDistQueue, N_Rows, N_Cols, start);
 

@@ -28,7 +28,7 @@ Edge makeEdge(Loc start, Loc end) {
 	Edge result = { start, end };
 	return result;
 }
-Node makeNode(int dist, Loc location, Color color, Loc parent) {
+Node makeNode(double dist, Loc location, Color color, Loc parent) {
 	Node result = { dist, location, color, parent };
 	return result;
 }

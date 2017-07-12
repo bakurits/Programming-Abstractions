@@ -49,14 +49,14 @@ Edge makeEdge(Loc start, Loc end);
  * It stores location, color and parent node of node. 
  */
 struct Node {
-	int dist;
+	double dist;
 	Loc location;
 	Color color;
 	Loc parent;
 };
 
 /* Utility function to create an Node from its location, color and parent. */
-Node makeNode(int dist, Loc location, Color color, Loc parent);
+Node makeNode(double dist, Loc location, Color color, Loc parent);
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
