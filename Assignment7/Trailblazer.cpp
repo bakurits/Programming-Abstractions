@@ -48,8 +48,10 @@ Vector<Loc> shortestPath(Loc start,
 
 Set<Edge> createMaze(int numRows, int numCols)
 {
-	Grid<Vector<double>> world(numRows, numCols);
-	fillWorld(world);
+	Grid<Vector<double>> world(numRows, numCols); // Stores edge's costs
+	TrailblazerPQueue<Edge> edges;				  // Stores Edges sorted by their cost
+	fillWorld(world), edges;
+	return getMinSpanningTree(world);
 }
 
 void prepareInitialState(Grid<double> &world,
@@ -88,35 +90,32 @@ void neighbourCheck(Grid<double> &world,
 
 	int curRow = curLocation.row;
 	int curCol = curLocation.col;
-	for (int vCol = -1; vCol <= 1; vCol++)
+	for (int i = 0; i < KNeighbour; i++)
 	{
-		for (int vRow = -1; vRow <= 1; vRow++)
+		int newRow = curRow + neighbours[i].row;
+		int newCol = curCol + neighbours[i].col;
+		if (!world.inBounds(newRow, newCol))
+			continue;
+
+		double newDist = nodes[curRow][curCol].dist +
+						 costFn(curLocation, makeLoc(newRow, newCol), world) +
+						 heuristic(makeLoc(newRow, newCol), end);
+
+		if (nodes[newRow][newCol].color == GRAY)
 		{
-			int newRow = curRow + vRow;
-			int newCol = curCol + vCol;
-			if (!world.inBounds(newRow, newCol))
-				continue;
-
-			double newDist = nodes[curRow][curCol].dist +
-							 costFn(curLocation, makeLoc(newRow, newCol), world) +
-							 heuristic(makeLoc(newRow, newCol), end);
-
-			if (nodes[newRow][newCol].color == GRAY)
+			nodes[newRow][newCol].color = YELLOW;
+			colorCell(world, makeLoc(newRow, newCol), YELLOW);
+			nodes[newRow][newCol].dist = newDist;
+			nodes[newRow][newCol].parent = curLocation;
+			minDistQueue.enqueue(nodes[newRow][newCol].location, nodes[newRow][newCol].dist);
+		}
+		else
+		{
+			if (nodes[newRow][newCol].color == YELLOW && nodes[newRow][newCol].dist > newDist)
 			{
-				nodes[newRow][newCol].color = YELLOW;
-				colorCell(world, makeLoc(newRow, newCol), YELLOW);
 				nodes[newRow][newCol].dist = newDist;
 				nodes[newRow][newCol].parent = curLocation;
-				minDistQueue.enqueue(nodes[newRow][newCol].location, nodes[newRow][newCol].dist);
-			}
-			else
-			{
-				if (nodes[newRow][newCol].color == YELLOW && nodes[newRow][newCol].dist > newDist)
-				{
-					nodes[newRow][newCol].dist = newDist;
-					nodes[newRow][newCol].parent = curLocation;
-					minDistQueue.decreaseKey(nodes[newRow][newCol].location, nodes[newRow][newCol].dist);
-				}
+				minDistQueue.decreaseKey(nodes[newRow][newCol].location, nodes[newRow][newCol].dist);
 			}
 		}
 	}
@@ -141,6 +140,51 @@ Vector<Loc> getRoute(Grid<Node> &nodes, Loc start, Loc end)
 	return result;
 }
 
-void fillWorld(Grid<Vector<double>> &world) {
-	
+void fillWorld(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges)
+{
+	int N_Rows = world.numRows();
+	int N_Cols = world.numCols();
+	for (int i = 0; i < N_Rows; i++)
+	{
+		for (int j = 0; j < N_Cols; j++)
+		{
+			for (int k = 0; k < KNeighbour; k++)
+			{
+				neighRow = i + neighbours[k].row;
+				neighCol = j + neighbours[k].col;
+				world[i][j].add(randomReal(0, 1) * world.inBounds(neighRow, neighCol));
+				edges.enqueue(makeEdge(makeLo1c(i, j), makeLoc(neighRow, neighCol)), world[i][j][k]);
+			}
+		}
+	}
+}
+
+Set<Edge> getMinSpanningTree(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges)
+{
+	Set<Edge> result;
+	Grid <Loc> clusters;
+	int clusterCount;
+	makeClusters(clusters, clusterCount);
+	while (clusterCount > 1)
+	{
+		Edge E = clusters.dequeueMin();
+		if (findCluster(E.start, clusters) != findCluster(E.end, clusters))
+		{
+			result.add(E);
+			unionClusters(E.start, E.end, clusters, clusterCount);
+		}
+	}
+	return result;
+}
+
+double edgeCost(Loc from, Loc to, Grid<Vector<double>> &world)
+{
+	int rowDif = to.row - from.row;
+	int ColDif = to.col - from.col;
+	int N_Neighbour = rowDif * 3 + ColDif;
+
+	if (N_Neighbour > 4)
+		N_Neighbour--;
+
+	return world[from.row][from.col][N_Neighbour];
 }

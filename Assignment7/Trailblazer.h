@@ -79,4 +79,41 @@ void neighbourCheck(Grid<double> &world,
  */
 Vector<Loc> getRoute(Grid<Node> &nodes, Loc start, Loc end);
 
+/* Function: fillWorld
+ *
+ * This function fills world with random costs
+ * For edges between adjacent cells
+ */
+void fillWorld(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges);
+
+/* Function: getMinSparingTree
+ *
+ * This function returs minimum spanning tree
+ */
+Set <Edge> getMinSpanningTree(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges);
+
+/*
+ *
+ *
+ */
+double edgeCost(Loc from, Loc to, Grid<Vector<double>> &world);
+
+/*
+ *
+ *
+ */
+makeClusters(Grid <Loc> &clusters, int &clusterCount);
+
+/*
+ *
+ *
+ */
+findCluster(Loc curLoc, Grid <Loc> &clusters);
+
+/*
+ *
+ *
+ */
+unionClusters(Loc first, Loc second, Grid <Loc> &clusters, int &clusterCount);
+
 #endif
