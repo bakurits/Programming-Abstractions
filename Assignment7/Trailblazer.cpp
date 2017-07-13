@@ -9,13 +9,14 @@
 #include "TrailblazerGraphics.h"
 #include "TrailblazerTypes.h"
 #include "TrailblazerPQueue.h"
+#include "vector.h"
 using namespace std;
 
 Vector<Loc> shortestPath(Loc start,
 						 Loc end,
 						 Grid<double> &world,
 						 double costFn(Loc from, Loc to, Grid<double> &world),
-						 double heuristic(Loc start, Loc end, Grid<double>& world))
+						 double heuristic(Loc start, Loc end, Grid<double> &world))
 {
 
 	int N_Rows = world.numRows(); // Number of Rows
@@ -47,9 +48,8 @@ Vector<Loc> shortestPath(Loc start,
 
 Set<Edge> createMaze(int numRows, int numCols)
 {
-	error("createMaze is not implemented yet.");
-	Set<Edge> a;
-	return a;
+	Grid<Vector<double>> world(numRows, numCols);
+	fillWorld(world);
 }
 
 void prepareInitialState(Grid<double> &world,
@@ -58,7 +58,7 @@ void prepareInitialState(Grid<double> &world,
 						 int N_Rows,
 						 int N_Cols,
 						 Loc start,
-						 double heuristic(Loc start, Loc end, Grid<double>& world))
+						 double heuristic(Loc start, Loc end, Grid<double> &world))
 {
 
 	for (int i = 0; i < N_Rows; i++)
@@ -83,7 +83,7 @@ void neighbourCheck(Grid<double> &world,
 					Loc curLocation,
 					Loc end,
 					double costFn(Loc from, Loc to, Grid<double> &world),
-					double heuristic(Loc start, Loc end, Grid<double>& world))
+					double heuristic(Loc start, Loc end, Grid<double> &world))
 {
 
 	int curRow = curLocation.row;
@@ -97,7 +97,7 @@ void neighbourCheck(Grid<double> &world,
 			if (!world.inBounds(newRow, newCol))
 				continue;
 
-			double newDist = nodes[curRow][curCol].dist + 
+			double newDist = nodes[curRow][curCol].dist +
 							 costFn(curLocation, makeLoc(newRow, newCol), world) +
 							 heuristic(makeLoc(newRow, newCol), end);
 
@@ -139,4 +139,8 @@ Vector<Loc> getRoute(Grid<Node> &nodes, Loc start, Loc end)
 	}
 
 	return result;
+}
+
+void fillWorld(Grid<Vector<double>> &world) {
+	
 }

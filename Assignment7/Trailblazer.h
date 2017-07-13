@@ -12,6 +12,7 @@
 #include "set.h"
 #include "grid.h"
 #include "TrailblazerPQueue.h"
+#include "vector.h"
 
 /* Function: shortestPath
  * 
