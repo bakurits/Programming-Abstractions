@@ -162,16 +162,17 @@ void fillWorld(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges)
 Set<Edge> getMinSpanningTree(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges)
 {
 	Set<Edge> result;
-	Grid <Loc> clusters;
+	Grid <int> clusterInd;
+	Vector <Vector<Loc>> locsInCluster;
 	int clusterCount;
-	makeClusters(clusters, clusterCount);
+	makeclusters(clusterInd, clusterCount, locsInCluster);
 	while (clusterCount > 1)
 	{
-		Edge E = clusters.dequeueMin();
-		if (findCluster(E.start, clusters) != findCluster(E.end, clusters))
+		Edge E = clusterInd.dequeueMin();
+		if (findCluster(E.start, clusterInd) != findCluster(E.end, clusterInd))
 		{
 			result.add(E);
-			unionClusters(E.start, E.end, clusters, clusterCount);
+			unionclusterInd(E.start, E.end, locsIncluster, clusterInd, clusterCount);
 		}
 	}
 	return result;
@@ -187,4 +188,45 @@ double edgeCost(Loc from, Loc to, Grid<Vector<double>> &world)
 		N_Neighbour--;
 
 	return world[from.row][from.col][N_Neighbour];
+}
+
+void makeClusters(Grid <int> &clusterInd, int &clusterCount, Vector <Vector<Loc>> &locsInCluster)
+{
+	int N_Rows = clusterInd.numRows();
+	int N_Cols = clusterInd.numCols();
+	clusterCount = N_Rows * N_Cols;
+	for (int i = 0; i < N_Rows; i++) 
+	{
+		for (int j = 0; j < N_Cols; j++) 
+		{
+			int curCluster = i * N_Cols + j
+			clusterInd[i][j] = curCluster;
+			Vector <Loc> temp;
+			temp.add(makeLoc(i, j));
+			locsInCluster[curCluster].add(temp);
+		}
+	}
+}
+
+int findCluster(Loc curLoc, Grid <int> &clusterInd)
+{
+	return clusterInd[curLoc.row][curLoc.col];
+}
+
+void unionClusters(Loc first, Loc second, Vector <Vector<Loc>> &locsInCluster, Grid <int> &clusterInd, int &clusterCount)
+{
+	firstsCluster = findCluster(first, clusterInd);
+	secondsCluster = findCluster(second, clusterInd);
+	if (firstsCluster != secondsCluster)
+	{
+		clusterCount--;
+		if (locsInCluster[firstsCluster].size() < locsInCluster[secondsCluster].size())
+			swap(firstsCluster, secondsCluster);
+		for (int i = 0; i < locsIncluster[secondsCluster].size()) 
+		{
+			Loc curLoc = locsIncluster[secondsCluster];
+			locsIncluster[firstsCluster].add(curLoc);
+			clusterInd[curLoc.row][curLoc.col] = firstsCluster;
+		}
+	}
 }

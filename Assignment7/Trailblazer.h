@@ -92,7 +92,7 @@ void fillWorld(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges);
  */
 Set <Edge> getMinSpanningTree(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges);
 
-/*
+/* Function: EdgeCost
  *
  *
  */
@@ -102,18 +102,18 @@ double edgeCost(Loc from, Loc to, Grid<Vector<double>> &world);
  *
  *
  */
-makeClusters(Grid <Loc> &clusters, int &clusterCount);
+void makeClusters(Grid <int> &clusters, int &clusterCount);
 
 /*
  *
  *
  */
-findCluster(Loc curLoc, Grid <Loc> &clusters);
+int findCluster(Loc curLoc, Grid <int> &clusters);
 
 /*
  *
  *
  */
-unionClusters(Loc first, Loc second, Grid <Loc> &clusters, int &clusterCount);
+void unionClusters(Loc first, Loc second, Grid <int> &clusters, int &clusterCount);
 
 #endif
