@@ -13,15 +13,10 @@ const double kMazeWall = 0.0;
 /* Constant representing the value of a floor cell in a maze. */
 const double kMazeFloor = 1.0;
 
-/* Constant representing the caunt of neighbours for each cell */
-const int KNeighbour = 8;
+/* Constant representing the caunt of neighbours for each cell for Djikstra*/
+const int KNeighbourForDjikstra = 9;
 
-/* Constant stores unit distances between adjacent cells */
-const Loc neighbours[] = 
-{ 
-    {-1, -1}, {-1, 0}, {-1, 1}, 
-    {0, -1},           {0, 1},
-    {1, -1}, {-1, 0}, {1, 1}
-};
+/* Constant representing the caunt of neighbours for each cell for Kruskal */
+const int KNeighbourForKruskal = 4;
 
 #endif

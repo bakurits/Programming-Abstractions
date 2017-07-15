@@ -13,6 +13,7 @@
 #include "grid.h"
 #include "TrailblazerPQueue.h"
 #include "vector.h"
+#include <vector>
 
 /* Function: shortestPath
  * 
@@ -84,35 +85,51 @@ Vector<Loc> getRoute(Grid<Node> &nodes, Loc start, Loc end);
  * This function fills world with random costs
  * For edges between adjacent cells
  */
-void fillWorld(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges);
+void fillWorld(Grid<vector<double>> &world, TrailblazerPQueue<Edge> &edges);
 
 /* Function: getMinSparingTree
  *
  * This function returs minimum spanning tree
  */
-Set <Edge> getMinSpanningTree(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges);
+Set <Edge> getMinSpanningTree(Grid<vector<double>> &world, TrailblazerPQueue<Edge> &edges);
 
 /* Function: EdgeCost
  *
- *
+ * This function returns cost of edge
+ * Between "from" and "to"
  */
-double edgeCost(Loc from, Loc to, Grid<Vector<double>> &world);
+double edgeCost(Loc from, Loc to, Grid<vector<double>> &world);
 
-/*
+/* Function : getNeighbourInd
  *
+ * This function return index of "to" in "from's" neighbour list.
+ * You can find more information about this function in README.docx.
+ */
+int getNeighbourInd(Loc from, Loc to);
+
+/* Function : getNeighbour
  *
+ * This function returns "diff"-th meighbour of "from"
+ * You can find more information about this function in README.docx.
+ */
+Loc getNeighbour(Loc from, int diff);
+
+/* Function: makeClusters
+ *
+ * This function makes initial state for clusters
  */
 void makeClusters(Grid <int> &clusters, int &clusterCount);
 
-/*
+/* Function: findCluster
  *
- *
+ * This method finds cluster where "curLoc" is located
  */
 int findCluster(Loc curLoc, Grid <int> &clusters);
 
-/*
+/* Function: unionClusters
  *
- *
+ * This function unions two cluster
+ * You can find more information about this function in README.docx.
  */
 void unionClusters(Loc first, Loc second, Grid <int> &clusters, int &clusterCount);
 
