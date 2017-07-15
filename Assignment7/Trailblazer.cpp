@@ -9,7 +9,10 @@
 #include "TrailblazerGraphics.h"
 #include "TrailblazerTypes.h"
 #include "TrailblazerPQueue.h"
+#include "TrailblazerConstants.h"
 #include "vector.h"
+#include "random.h"
+
 using namespace std;
 
 Vector<Loc> shortestPath(Loc start,
@@ -27,7 +30,7 @@ Vector<Loc> shortestPath(Loc start,
 
 	TrailblazerPQueue<Loc> minDistQueue; // Stores nodes associated with their distance from sratring cell.
 
-	prepareInitialState(world, nodes, minDistQueue, N_Rows, N_Cols, start, heuristic);
+	prepareInitialState(world, nodes, minDistQueue, N_Rows, N_Cols, start, end, heuristic);
 
 	while (!minDistQueue.isEmpty())
 	{
@@ -50,7 +53,7 @@ Set<Edge> createMaze(int numRows, int numCols)
 {
 	Grid<vector<double>> world(numRows, numCols); // Stores edge's costs
 	TrailblazerPQueue<Edge> edges;				  // Stores Edges sorted by their cost
-	fillWorld(world), edges;
+	fillWorld(world, edges);
 	return getMinSpanningTree(world, edges);
 }
 
@@ -60,6 +63,7 @@ void prepareInitialState(Grid<double> &world,
 						 int N_Rows,
 						 int N_Cols,
 						 Loc start,
+						 Loc end,
 						 double heuristic(Loc start, Loc end, Grid<double> &world))
 {
 
@@ -90,7 +94,7 @@ void neighbourCheck(Grid<double> &world,
 
 	int curRow = curLocation.row;
 	int curCol = curLocation.col;
-	for (int i = 0; i < KNeighbour; i++)
+	for (int i = 0; i < KNeighbourForDjikstra; i++)
 	{
 		int newRow = curRow + i / 3 - 1;
 		int newCol = curCol + i % 3 - 1;
@@ -106,7 +110,7 @@ void neighbourCheck(Grid<double> &world,
 			colorCell(world, makeLoc(newRow, newCol), YELLOW);
 			nodes[newRow][newCol].dist = newDist;
 			nodes[newRow][newCol].parent = curLocation;
-			minDistQueue.enqueue(nodes[newRow][newCol].location, newDist + heuristic(makeLoc(newRow, newCol), end));
+			minDistQueue.enqueue(nodes[newRow][newCol].location, newDist + heuristic(makeLoc(newRow, newCol), end, world));
 		}
 		else
 		{
@@ -114,7 +118,7 @@ void neighbourCheck(Grid<double> &world,
 			{
 				nodes[newRow][newCol].dist = newDist;
 				nodes[newRow][newCol].parent = curLocation;
-				minDistQueue.decreaseKey(nodes[newRow][newCol].location, newDist + heuristic(makeLoc(newRow, newCol), end));
+				minDistQueue.decreaseKey(nodes[newRow][newCol].location, newDist + heuristic(makeLoc(newRow, newCol), end, world));
 			}
 		}
 	}
@@ -149,7 +153,7 @@ void fillWorld(Grid<vector<double>> &world, TrailblazerPQueue<Edge> &edges)
 		{
 			for (int k = 0; k < KNeighbourForKruskal; k++)
 			{
-				Loc neighLoc = getNeighbour(k);
+				Loc neighLoc = getNeighbour(makeLoc(i, j), k);
 				if (world.inBounds(neighLoc.row, neighLoc.col))
 				{
 					if (world[neighLoc.row][neighLoc.col].size() == 0)
@@ -174,18 +178,20 @@ void fillWorld(Grid<vector<double>> &world, TrailblazerPQueue<Edge> &edges)
 
 Set<Edge> getMinSpanningTree(Grid<vector<double>> &world, TrailblazerPQueue<Edge> &edges)
 {
-	Set<Edge> result; 					// Stores edges of minimum spanning tree
-	Grid<int> clusterInd; 				// Stores cluster for each cell
-	vector<vector<Loc>> locsInCluster;	// Stores cells for each cluster
-	int clusterCount;					// Steres count of clusters
-	makeclusters(clusterInd, clusterCount, locsInCluster);
+	int a = world.numRows();
+	int b = world.numCols();
+	Set<Edge> result; 											// Stores edges of minimum spanning tree
+	Grid<int> clusterInd(world.numRows(), world.numCols()); 	// Stores cluster for each cell
+	vector< vector<Loc> > locsInCluster;						// Stores cells for each cluster
+	int clusterCount;											// Steres count of clusters
+	makeClusters(clusterInd, clusterCount, locsInCluster);
 	while (clusterCount > 1)
 	{
-		Edge E = clusterInd.dequeueMin();
+		Edge E = edges.dequeueMin();
 		if (findCluster(E.start, clusterInd) != findCluster(E.end, clusterInd))
 		{
 			result.add(E);
-			unionclusterInd(E.start, E.end, locsIncluster, clusterInd, clusterCount);
+			unionClusters(E.start, E.end, locsInCluster, clusterInd, clusterCount);
 		}
 	}
 	return result;
@@ -217,7 +223,7 @@ Loc getNeighbour(Loc from, int diff)
 	return makeLoc(from.row + diffRow, from.col + diffCol);
 }
 
-void makeClusters(Grid<int> &clusterInd, int &clusterCount, vector<vector<Loc>> &locsInCluster)
+void makeClusters(Grid<int> &clusterInd, int &clusterCount, vector< vector<Loc> > &locsInCluster)
 {
 	int N_Rows = clusterInd.numRows();
 	int N_Cols = clusterInd.numCols();
@@ -230,7 +236,7 @@ void makeClusters(Grid<int> &clusterInd, int &clusterCount, vector<vector<Loc>> 
 			clusterInd[i][j] = curCluster;
 			vector<Loc> temp;
 			temp.push_back(makeLoc(i, j));
-			locsInCluster[curCluster].push_back(temp);
+			locsInCluster.push_back(temp);
 		}
 	}
 }
@@ -240,7 +246,10 @@ int findCluster(Loc curLoc, Grid<int> &clusterInd)
 	return clusterInd[curLoc.row][curLoc.col];
 }
 
-void unionClusters(Loc first, Loc second, vector<vector<Loc>> &locsInCluster, Grid<int> &clusterInd, int &clusterCount)
+void unionClusters(Loc first, Loc second, 
+				   vector< vector<Loc> > &locsInCluster, 
+				   Grid<int> &clusterInd, 
+				   int &clusterCount)
 {
 	int firstsCluster = findCluster(first, clusterInd);
 	int secondsCluster = findCluster(second, clusterInd);
@@ -249,10 +258,10 @@ void unionClusters(Loc first, Loc second, vector<vector<Loc>> &locsInCluster, Gr
 		clusterCount--;
 		if (locsInCluster[firstsCluster].size() < locsInCluster[secondsCluster].size())
 			swap(firstsCluster, secondsCluster);
-		for (int i = 0; i < locsIncluster[secondsCluster].size())
+		for (int i = 0; i < locsInCluster[secondsCluster].size(); i++)
 		{
-			Loc curLoc = locsIncluster[secondsCluster];
-			locsIncluster[firstsCluster].push_back(curLoc);
+			Loc curLoc = locsInCluster[secondsCluster][i];
+			locsInCluster[firstsCluster].push_back(curLoc);
 			clusterInd[curLoc.row][curLoc.col] = firstsCluster;
 		}
 	}
