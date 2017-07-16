@@ -51,10 +51,10 @@ Set<Edge> createMaze(int numRows, int numCols);
  * Makes nodes grey and Puts srarting point in queue.
  */
 void prepareInitialState(Grid<double> &world, Grid<Node> &nodes,
-						 TrailblazerPQueue<Loc> &minDistQueue,
-						 int N_Rows, int N_Cols,
-						 Loc start, Loc end,
-						 double heuristic(Loc start, Loc end, Grid<double> &world));
+						TrailblazerPQueue<Loc> &minDistQueue,
+						int N_Rows, int N_Cols,
+						Loc start, Loc end,
+						double heuristic(Loc start, Loc end, Grid<double> &world));
 
 /* Function: neighbourCheck
  *

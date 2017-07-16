@@ -56,10 +56,9 @@ Set<Edge> createMaze(int numRows, int numCols)
 }
 
 void prepareInitialState(Grid<double> &world, Grid<Node> &nodes,
-						 TrailblazerPQueue<Loc> &minDistQueue,
-						 int N_Rows, int N_Cols,
-						 Loc start, Loc end,
-						 double heuristic(Loc start, Loc end, Grid<double> &world))
+						TrailblazerPQueue<Loc> &minDistQueue,
+						int N_Rows, int N_Cols,
+						double heuristic(Loc start, Loc end, Grid<double> &world))
 {
 
 	for (int i = 0; i < N_Rows; i++)
