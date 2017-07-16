@@ -28,12 +28,10 @@
  * search.  Make sure to update both this function prototype and the
  * implementation inside of Trailblazer.cpp.
  */
-Vector<Loc>
-shortestPath(Loc start,
-			 Loc end,
-			 Grid<double> &world,
-			 double costFn(Loc from, Loc to, Grid<double> &world),
-			 double heuristic(Loc start, Loc end, Grid<double>& world));
+Vector<Loc> shortestPath(Loc start, Loc end,
+						 Grid<double> &world,
+						 double costFn(Loc from, Loc to, Grid<double> &world),
+						 double heuristic(Loc start, Loc end, Grid<double> &world));
 
 /* Function: createMaze
  * 
@@ -52,13 +50,11 @@ Set<Edge> createMaze(int numRows, int numCols);
  * This function prepares initial state of algorithm
  * Makes nodes grey and Puts srarting point in queue.
  */
-void prepareInitialState(Grid<double> &world,
-						 Grid<Node> &nodes,
+void prepareInitialState(Grid<double> &world, Grid<Node> &nodes,
 						 TrailblazerPQueue<Loc> &minDistQueue,
-						 int N_Rows,
-						 int N_Cols,
-						 Loc start,
-						 double heuristic(Loc start, Loc end, Grid<double>& world));
+						 int N_Rows, int N_Cols,
+						 Loc start, Loc end,
+						 double heuristic(Loc start, Loc end, Grid<double> &world));
 
 /* Function: neighbourCheck
  *

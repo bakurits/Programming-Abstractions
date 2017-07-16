@@ -14,8 +14,7 @@
 
 using namespace std;
 
-Vector<Loc> shortestPath(Loc start,
-						 Loc end,
+Vector<Loc> shortestPath(Loc start, Loc end,
 						 Grid<double> &world,
 						 double costFn(Loc from, Loc to, Grid<double> &world),
 						 double heuristic(Loc start, Loc end, Grid<double> &world))
@@ -56,13 +55,10 @@ Set<Edge> createMaze(int numRows, int numCols)
 	return getMinSpanningTree(world, edges);
 }
 
-void prepareInitialState(Grid<double> &world,
-						 Grid<Node> &nodes,
+void prepareInitialState(Grid<double> &world, Grid<Node> &nodes,
 						 TrailblazerPQueue<Loc> &minDistQueue,
-						 int N_Rows,
-						 int N_Cols,
-						 Loc start,
-						 Loc end,
+						 int N_Rows, int N_Cols,
+						 Loc start, Loc end,
 						 double heuristic(Loc start, Loc end, Grid<double> &world))
 {
 
@@ -82,11 +78,9 @@ void prepareInitialState(Grid<double> &world,
 	minDistQueue.enqueue(start, heuristic(start, end, world));
 }
 
-void neighbourCheck(Grid<double> &world,
-					Grid<Node> &nodes,
+void neighbourCheck(Grid<double> &world, Grid<Node> &nodes,
 					TrailblazerPQueue<Loc> &minDistQueue,
-					Loc curLocation,
-					Loc end,
+					Loc curLocation, Loc end,
 					double costFn(Loc from, Loc to, Grid<double> &world),
 					double heuristic(Loc start, Loc end, Grid<double> &world))
 {
