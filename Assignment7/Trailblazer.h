@@ -13,7 +13,6 @@
 #include "grid.h"
 #include "TrailblazerPQueue.h"
 #include "vector.h"
-#include <vector>
 
 /* Function: shortestPath
  * 
@@ -85,20 +84,20 @@ Vector<Loc> getRoute(Grid<Node> &nodes, Loc start, Loc end);
  * This function fills world with random costs
  * For edges between adjacent cells
  */
-void fillWorld(Grid<vector<double>> &world, TrailblazerPQueue<Edge> &edges);
+void fillWorld(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges);
 
 /* Function: getMinSparingTree
  *
  * This function returs minimum spanning tree
  */
-Set <Edge> getMinSpanningTree(Grid<vector<double>> &world, TrailblazerPQueue<Edge> &edges);
+Set <Edge> getMinSpanningTree(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges);
 
 /* Function: EdgeCost
  *
  * This function returns cost of edge
  * Between "from" and "to"
  */
-double edgeCost(Loc from, Loc to, Grid<vector<double>> &world);
+double edgeCost(Loc from, Loc to, Grid<Vector<double>> &world);
 
 /* Function : getNeighbourInd
  *
