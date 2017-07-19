@@ -113,19 +113,22 @@ Loc getNeighbour(Loc from, int diff);
  *
  * This function makes initial state for clusters
  */
-void makeClusters(Grid <Loc> &cluster);
+void makeClusters(Grid<int> &clusterInd, int &clusterCount, Vector<Vector<Loc>> &locsInCluster);
 
 /* Function: findCluster
  *
  * This method finds cluster where "curLoc" is located
  */
-Loc findCluster(Loc curLoc, Grid <Loc> &cluster);
+int findCluster(Loc curLoc, Grid <int> &clusters);
 
 /* Function: unionClusters
  *
  * This function unions two cluster
  * You can find more information about this function in README.docx.
  */
-void unionClusters(Loc first, Loc second, Grid <Loc> &cluster);
+void unionClusters(Loc first, Loc second,
+				   Vector<Vector<Loc>> &locsInCluster,
+				   Grid<int> &clusterInd,
+				   int &clusterCount);
 
 #endif

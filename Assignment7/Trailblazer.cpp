@@ -170,15 +170,17 @@ void fillWorld(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges)
 Set<Edge> getMinSpanningTree(Grid<Vector<double>> &world, TrailblazerPQueue<Edge> &edges)
 {
 	Set<Edge> result;	// Stores edges of minimum spanning tree
-	Grid<Loc> cluster(world.nRows, world.nCols);	// Stores root of current cluster
-	makeClusters(cluster);
-	while (!edges.isEmpty())
+	Grid<int> clusterInd(world.nRows, world.nCols);	// Stores cluster for each cell
+	Vector<Vector<Loc>> locsInCluster;	// Stores cells for each cluster
+	int clusterCount;	// Steres count of clusters
+	makeClusters(clusterInd, clusterCount, locsInCluster);
+	while (clusterCount > 1)
 	{
 		Edge E = edges.dequeueMin();
-		if (findCluster(E.start, cluster) != findCluster(E.end, cluster))
+		if (findCluster(E.start, clusterInd) != findCluster(E.end, clusterInd))
 		{
 			result.add(E);
-			unionClusters(E.start, E.end, cluster);
+			unionClusters(E.start, E.end, locsInCluster, clusterInd, clusterCount);
 		}
 	}
 	return result;
@@ -210,34 +212,47 @@ Loc getNeighbour(Loc from, int diff)
 	return makeLoc(from.row + diffRow, from.col + diffCol);
 }
 
-void makeClusters(Grid<Loc> &cluster)
+void makeClusters(Grid<int> &clusterInd, int &clusterCount, Vector<Vector<Loc>> &locsInCluster)
 {
-	int N_Rows = cluster.nRows;
-	int N_Cols = cluster.nCols;
+	int N_Rows = clusterInd.nRows;
+	int N_Cols = clusterInd.nCols;
+	clusterCount = N_Rows * N_Cols;
 	for (int i = 0; i < N_Rows; i++)
 	{
 		for (int j = 0; j < N_Cols; j++)
 		{
-			cluster[i][j] = makeLoc(i, j);
+			int curCluster = i * N_Cols + j;
+			clusterInd[i][j] = curCluster;
+			Vector<Loc> temp;
+			temp.add(makeLoc(i, j));
+			locsInCluster.add(temp);
 		}
 	}
 }
 
-Loc findCluster(Loc curLoc, Grid<Loc> &cluster)
+int findCluster(Loc curLoc, Grid<int> &clusterInd)
 {
-	if (cluster[curLoc.row][curLoc.col] == curLoc) 
-		return curLoc;
-	return cluster[curLoc.row][curLoc.col] = 
-			findCluster(cluster[curLoc.row][curLoc.col], cluster);
+	return clusterInd[curLoc.row][curLoc.col];
 }
 
 void unionClusters(Loc first, Loc second,
-				   Grid<Loc> &cluster)
+				   Vector<Vector<Loc>> &locsInCluster,
+				   Grid<int> &clusterInd,
+				   int &clusterCount)
 {
-	Loc firstsCluster = findCluster(first, cluster);
-	Loc secondsCluster = findCluster(second, cluster);
+	int firstsCluster = findCluster(first, clusterInd);
+	int secondsCluster = findCluster(second, clusterInd);
 	if (firstsCluster != secondsCluster)
 	{
-		cluster[firstsCluster.row][firstsCluster.col] = second;
+		clusterCount--;
+		if (locsInCluster[firstsCluster].size() < locsInCluster[secondsCluster].size())
+			swap(firstsCluster, secondsCluster);
+		for (int i = 0; i < locsInCluster[secondsCluster].size(); i++)
+		{
+			Loc curLoc = locsInCluster[secondsCluster][i];
+			locsInCluster[firstsCluster].add(curLoc);
+			clusterInd[curLoc.row][curLoc.col] = firstsCluster;
+		}
+		locsInCluster[secondsCluster].clear();
 	}
 }
