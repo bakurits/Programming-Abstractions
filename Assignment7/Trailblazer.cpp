@@ -21,7 +21,7 @@ Vector<Loc> shortestPath(Loc start, Loc end,
 {
 
 	int N_Rows = world.nRows; // Number of Rows
-	int N_Cols = world.numCols; // Number of Columns
+	int N_Cols = world.nCols; // Number of Columns
 
 	Grid<Node> nodes(N_Rows, N_Cols); // Stores information about grid cells.
 									  // Their location, color, parent and distance from starting cell.
@@ -58,6 +58,7 @@ Set<Edge> createMaze(int numRows, int numCols)
 void prepareInitialState(Grid<double> &world, Grid<Node> &nodes,
 						TrailblazerPQueue<Loc> &minDistQueue,
 						int N_Rows, int N_Cols,
+						Loc start, Loc end,
 						double heuristic(Loc start, Loc end, Grid<double> &world))
 {
 
